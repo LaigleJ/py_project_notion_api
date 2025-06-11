@@ -1,0 +1,6 @@
+[project]
+dependencies = [
+    "requests",
+    "pandas",
+    "python-dotenv"  # pour stocker le token API en sécurité
+]
