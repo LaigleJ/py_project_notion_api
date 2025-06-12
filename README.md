@@ -1,12 +1,13 @@
 # py_project_notion_api
 
 <!-- 
-    notion_data_project/
+    mon_projet_notion/
     │
-    ├── main.py                      # point d’entrée principal
-    ├── notion_api.py                # fonctions d’accès à l’API
-    ├── data_processing.py           # fonctions pandas, nettoyage, etc.
-    ├── .env                         # contient le token API
-    ├── pyproject.toml               # dépendances du projet
-    └── README.md                    # instructions      
+    ├── .env                   # Clés API et IDs des bases
+    ├── main.py                # Script principal
+    ├── notion_api.py          # Fonctions liées aux requêtes Notion
+    ├── facture_utils.py       # Fonctions de traitement/facture
+    ├── requirements.txt       # Dépendances (requests, python-dotenv, pandas)
+    └── README.md              # Explication du projet
+
 -->
