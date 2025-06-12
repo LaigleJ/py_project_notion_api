@@ -77,30 +77,20 @@ def query_unbilled_entries(date_begin: str, date_end: str, a_ete_facture: bool):
         print("Message :", response.text)
         response.raise_for_status()
 
+    # création d'un fichier csv avec les données récupérées
+        print("📄 Création du fichier CSV...")
+    results = response.json().get("results", [])
+    if not results:
+        print("⚠️ Aucune donnée trouvée pour cette période.")
+        return []   
+    # Convertir les résultats en DataFrame
+    df = pd.json_normalize(results)
+    # Enregistrer le DataFrame en CSV
+    csv_filename = f"interventions_{date_begin}_to_{date_end}.csv"
+    df.to_csv(csv_filename, index=False)
+    print(f"✅ Fichier CSV créé : {csv_filename}")
+
     print("✅ Données bien récupérées !")
     pprint(response.json())
     return response.json()["results"]
   
-  # Transformer les datas reçu en csv : 
-# def extraire_interventions(results):
-  # lignes = []
-  # for item in results:
-  #     props = item["properties"]
-
-  #     # Extraction simple des propriétés utiles
-  #     ligne = {
-  #         "École": props["Ecole"]["title"][0]["plain_text"] if props["Ecole"]["title"] else "",
-  #         "Ville": props["Ville"]["select"]["name"] if props["Ville"]["select"] else "",
-  #         "Classe": props["Classe"]["rich_text"][0]["plain_text"] if props["Classe"]["rich_text"] else "",
-  #         "Nombre heures": props["Nombre heures"]["number"],
-  #         "Tarif horaire": props["Tarif horaire"]["number"],
-  #         "Date de début": props["Date de début"]["date"]["start"],
-  #         "Facturé": props["Facturé"]["checkbox"]
-  #     }
-
-  #     # Calcul du montant à facturer
-  #     ligne["Montant"] = ligne["Nombre heures"] * ligne["Tarif horaire"] if ligne["Nombre heures"] and ligne["Tarif horaire"] else 0
-
-  #     lignes.append(ligne)
-
-  # return pd.DataFrame(lignes)
