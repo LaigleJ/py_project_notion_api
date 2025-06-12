@@ -12,7 +12,7 @@ import pandas as pd
 
 # pour tester la query recuperer les datat facturé
 date_debut = "2025-01-01"
-date_fin = "2025-12-31"
+date_fin = "2025-02-15"
 facture = False
 
 results = query_unbilled_entries(date_debut, date_fin, facture)
@@ -21,8 +21,8 @@ results = query_unbilled_entries(date_debut, date_fin, facture)
 print(f"✅ {len(results)} interventions récupérées.")
 
 # affichage partiel
-for i, row in enumerate(results[:3]):
-    pprint(row)
+# for i, row in enumerate(results[:3]):
+#     pprint(row)
 
 # Faire le csv
 # results = query_unbilled_entries(date_debut, date_fin, facture)

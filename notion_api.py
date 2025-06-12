@@ -21,12 +21,12 @@ def get_database_properties(database_id):
     url = f"https://api.notion.com/v1/databases/{database_id}" 
     response = requests.get(url, headers=HEADERS) 
     response.raise_for_status() 
-    print("good tutututu")
+    print("[get_database_properties]")
     return response.json()
   
 if __name__ == "__main__":
     from pprint import pprint
-    load_dotenv()  # ← Requis ici aussi si tu exécutes ce fichier seul
+    load_dotenv()  
     print("🔌 Connexion en cours à Notion...")
     data = get_database_properties(DB_ID)
     pprint(data)
