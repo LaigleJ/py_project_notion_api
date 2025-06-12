@@ -10,14 +10,19 @@ Je l’ai structuré avec des titres clairs, des emojis pour la lisibilité, un 
 
 ---
 
-## 📅 Planning prévisionnel
+## 📅 Plan 
 
-| Étape       | Description                                     | Statut     | Date         |
-|-------------|-------------------------------------------------|------------|--------------|
-| ✅ Étape 1   | Connexion à l'API Notion via fichier `.env`     | Terminé    | 2025-06-10   |
-| ✅ Étape 2   | Fonction `query_unbilled_entries()`             | Terminé    | 2025-06-11   |
-| 🔄 Étape 3   | Analyse avec `pandas`                           | En cours   |              |
-| ⏳ Étape 4   | Génération de factures + export CSV             | À faire    |              |
+| Étape         | Description                                     | Statut     | Date         |
+|-------------- |-------------------------------------------------|------------|--------------|
+| ✅ Étape 1   | Connexion à l'API Notion via fichier `.env`     | Terminé    | 2025-06-12   |
+| ✅ Étape 2   | Fonction `query_unbilled_entries()`             | Terminé    | -            |
+| ✅ -         | Analyse avec `pandas`                           | Terminé    | 2025-06-12   |
+| ✅ Étape 3   | Génération de factures + export CSV             | Terminé    | -            |
+| ✅ -         | Ecriture des factures sur notion                | Terminé    | 2025-06-12   |
+| ⏳ Étape 4   | Mise en page : generate_invoice_blocks          | À faire    | -            |
+| ⏳ Étape 5   | Mise en page : def create_invoice_page          | À faire    | -            |
+| ⏳ Étape 6   | Mise à joour : mark_as_billed(pages)            | À faire    | -            |
+| 🔄 Étape 7   | Orchestrer tout le processus dans le main       | En cours   | 2025-06-12   |
 
 ---
 
@@ -32,16 +37,17 @@ Je l’ai structuré avec des titres clairs, des emojis pour la lisibilité, un 
 └── 📁 assets/
 └── 📸 capture\_api\_ok.png
 
-
-
 ---
+
+
+### Étape 0 & 1– Configuration de l’environnement & Définir les entêtes pour l’API Notion
 
 ## ✅ Fonctionnalités implémentées
 
 - [x] Connexion sécurisée à l'API Notion via clé secrète
 - [x] Requête filtrée selon la colonne **Facturé** + plage de dates
-- [ ] Analyse des résultats avec `pandas`
-- [ ] Export en `.csv` automatique
+- [x] Analyse des résultats avec `pandas`
+- [x] Export en `.csv` automatique
 
 ---
 
@@ -50,15 +56,6 @@ Je l’ai structuré avec des titres clairs, des emojis pour la lisibilité, un 
 - 🔄 Vérification manuelle dans le terminal (print & logs)
 - ✅ Code retour HTTP 200 → données bien récupérées
 
----
-
-## ❓ Questions en suspens
-
-- Faut-il détecter des **doublons** avant génération des factures ?
-- L'envoi des factures se fait-il **par email** ou en simple export local ?
-- Le format du CSV attendu est-il **standardisé** ou libre ?
-
----
 
 ## 📸 Capture – Connexion à l'API réussie
 
@@ -67,6 +64,9 @@ Je l’ai structuré avec des titres clairs, des emojis pour la lisibilité, un 
 ![Connexion API OK](./assets/capture_api_ok.png)
 
 ---
+
+
+### Étape 2 – Fonction query_unbilled_entries(date_begin : str, date_end : str, a_ete_facture : bool)
 
 ## 🔍 Code – Requête des interventions non facturées + CSV
 
@@ -119,17 +119,8 @@ def query_unbilled_entries(date_begin: str, date_end: str, a_ete_facture: bool):
     return results
 ````
 
----
 
-## 📌 Remarques techniques
-
-* 📅 Le champ **"Date de début"** a été utilisé comme référence temporelle pour les requêtes.
-* 🧹 Les données sont normalisées avant export grâce à `pandas.json_normalize`.
-* 🔐 Les variables sensibles (token API, ID base) sont isolées dans le fichier `.env`.
-
----
-
-## 🧭 Prochaine étape
+## 🧭 Prochaines étapes
 
 ➡️ Nettoyage et transformation des données avec `pandas`
 ➡️ Préparation des templates de factures (PDF ou CSV)
@@ -276,6 +267,9 @@ def analyse_heures_et_montant_total(df):
 
     return resume
 ````
+Total heures enseignées       Montant total à facturer
+235.5 h	                      2 312.5 €
+
 
 ## Analyse par ville : nombre d'écoles, heures, montant
 [Analyse par ville](./assets/CSV/analyse_par_ville.csv)
@@ -286,3 +280,64 @@ def analyse_heures_et_montant_total(df):
 ## Analyse globale : total des heures enseignées et somme à facturer
 [Analyse par ville](./assets/CSV/analyse_globale.csv)
 
+### ETAPE 3 : Première fonction de création de factures dans Notion 
+
+## Extrait du code facture_utils.py ::
+```PYTHON
+def create_invoice_page(client: str, interventions: list, total: float, invoice_number: str):
+    if not DB_INVOICES_ID:
+        raise ValueError("❌ DB_INVOICES_ID manquant. Vérifie ton .env")
+
+    children = []
+    for item in interventions:
+        props = item["properties"]
+        cours = props["Cours"]["title"][0]["text"]["content"] if props["Cours"]["title"] else "Sans nom"
+        heures = props["Nombre heures"]["number"]
+        tarif = props["Tarif horaire"]["number"]
+        montant = heures * tarif
+
+        ligne = f"{cours} - {heures}h x {tarif}€/h = {montant}€"
+
+        children.append({
+            "object": "block",
+            "type": "paragraph",
+            "paragraph": {
+                "rich_text": [{
+                    "type": "text",
+                    "text": {"content": ligne}
+                }]
+            }
+        })
+
+    payload = {
+        "parent": {"database_id": DB_INVOICES_ID},
+        "properties": {
+            "Client": {
+                "title": [{"text": {"content": client}}]
+            },
+            "Mois": {
+                "rich_text": [{"text": {"content": datetime.now().strftime("%Y-%m")}}]
+            },
+            "Total Amount": {
+                "number": total
+            },
+            "Invoice Number": {
+                "rich_text": [{"text": {"content": invoice_number}}]
+            }
+        },
+        "children": children
+    }
+
+    print("🛠️ Payload envoyé à Notion :")
+    import json
+    print(json.dumps(payload, indent=2))
+
+    response = requests.post("https://api.notion.com/v1/pages", headers=HEADERS, json=payload)
+    response.raise_for_status()
+    print("✅ Facture créée avec succès sur Notion.")
+    return response.json()
+
+````
+
+##Capture Ecran de la db invoices de notion
+![Capture écran des facures dans notion](./assets/capture_db_invoices_remplies.png)
