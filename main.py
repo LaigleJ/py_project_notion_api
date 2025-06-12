@@ -12,7 +12,7 @@ import pandas as pd
 
 # pour tester la query recuperer les datat facturé
 date_debut = "2025-01-01"
-date_fin = "2025-02-15"
+date_fin = "2025-04-15"
 facture = False
 
 results = query_unbilled_entries(date_debut, date_fin, facture)

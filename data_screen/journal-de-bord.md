@@ -137,3 +137,6 @@ def query_unbilled_entries(date_begin: str, date_end: str, a_ete_facture: bool):
 
 ---
 
+##  🔍 Questions pour analyse :
+### récupérer les résultats et montrez via des DataFrames :
+par ville, le nombre d’écoles, le nombre d’heures données et la somme à facturer
