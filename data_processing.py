@@ -54,7 +54,7 @@ def analyse_par_ecole_et_classe(df):
     print(stats)
     return stats.reset_index()
 
-
+  
 # Analyse par mois (passé et futur)
 def analyse_par_mois(df):
     if df is None or df.empty:
@@ -71,3 +71,23 @@ def analyse_par_mois(df):
     print("\n📆 Heures par mois (passé/futur):")
     print(futur_stats)
     return futur_stats
+  
+  
+  
+# Analyse globale : total des heures enseignées et somme à facturer
+def analyse_heures_et_montant_total(df):
+    if df is None or df.empty:
+        return pd.DataFrame()
+    
+    total_heures = df["Nombre heures"].sum()
+    total_montant = df["Montant"].sum()
+
+    resume = pd.DataFrame([{
+        "Total heures enseignées": total_heures,
+        "Montant total à facturer (€)": total_montant
+    }])
+    
+    print("\n📈 Total général :")
+    print(resume)
+
+    return resume

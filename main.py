@@ -4,7 +4,7 @@ import pandas as pd
 from pprint import pprint
 
 from notion_api import query_unbilled_entries
-from data_processing import extraire_interventions, analyse_par_ville, analyse_par_ecole_et_classe, analyse_par_mois
+from data_processing import extraire_interventions, analyse_par_ville, analyse_par_ecole_et_classe, analyse_par_mois, analyse_heures_et_montant_total
 
 #Pour récup les noms des collumn
 # db_info = get_database_properties(os.getenv("DB_INTERVENTIONS_ID"))
@@ -61,5 +61,10 @@ analyse_ecole_classe.to_csv("analyse_par_ecole_et_classe.csv", index=False)
 analyse_mois.to_csv("analyse_par_mois.csv", index=False)
 print("✅ Fichiers CSV enregistrés.")
 
-# --- ÉTAPE 4 : Export des résultats (facultatif) ---
+print("\n📈 Analyse globale des heures et montant total...")
+analyse_globale = analyse_heures_et_montant_total(df)
+analyse_globale.to_csv("analyse_globale.csv", index=False)
+
+
+# --- ÉTAPE 4 : Export des résultats  ---
 print("\n💾 Sauvegarde des analyses dans des fichiers CSV...")
