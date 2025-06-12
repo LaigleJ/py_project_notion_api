@@ -1,9 +1,10 @@
 # # main.py
 import os
-from pprint import pprint
-from notion_api import extraire_interventions, query_unbilled_entries,  get_database_properties
-
 import pandas as pd
+from pprint import pprint
+
+from notion_api import query_unbilled_entries
+from data_processing import extraire_interventions, analyse_par_ville, analyse_par_ecole_et_classe, analyse_par_mois
 
 #Pour récup les noms des collumn
 # db_info = get_database_properties(os.getenv("DB_INTERVENTIONS_ID"))
@@ -27,3 +28,38 @@ print(f"✅ {len(results)} interventions récupérées.")
 # Extraire interventions dans un DataFrame
 df = extraire_interventions(results)
 print(df.head())
+
+
+# --- PARAMÈTRES ---
+date_debut = "2024-01-01"
+date_fin = "2025-12-31"
+a_facturer = False  # ou None si on veut tout
+
+# --- ÉTAPE 1 : Récupération des données ---
+print("📥 Récupération des données Notion...")
+results = query_unbilled_entries(date_debut, date_fin, a_facturer)
+print(f"✅ {len(results)} entrées récupérées.")
+
+# --- ÉTAPE 2 : Extraction en DataFrame ---
+df = extraire_interventions(results)
+print("📊 Données extraites dans un DataFrame.")
+
+# --- ÉTAPE 3 : Analyses ---
+print("\n🔎 Analyse par ville...")
+analyse_ville = analyse_par_ville(df)
+print(analyse_ville)
+
+print("\n🏫 Analyse par école et classe...")
+analyse_ecole_classe = analyse_par_ecole_et_classe(df)
+print(analyse_ecole_classe)
+
+print("\n🗓️ Analyse par mois (passé / futur)...")
+analyse_mois = analyse_par_mois(df)
+print(analyse_mois)
+analyse_ville.to_csv("analyse_par_ville.csv", index=False)
+analyse_ecole_classe.to_csv("analyse_par_ecole_et_classe.csv", index=False)
+analyse_mois.to_csv("analyse_par_mois.csv", index=False)
+print("✅ Fichiers CSV enregistrés.")
+
+# --- ÉTAPE 4 : Export des résultats (facultatif) ---
+print("\n💾 Sauvegarde des analyses dans des fichiers CSV...")
