@@ -20,7 +20,7 @@ results = query_unbilled_entries(date_debut, date_fin, facture)
 # Juste pour voir combien de lignes sont récupérées :
 print(f"✅ {len(results)} interventions récupérées.")
 
-# Facultatif : affichage partiel
+# affichage partiel
 for i, row in enumerate(results[:3]):
     pprint(row)
 
