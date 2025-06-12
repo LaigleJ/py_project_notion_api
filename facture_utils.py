@@ -1,15 +1,26 @@
-import requests
 import os
+import requests
 from datetime import datetime
-from notion_api import HEADERS
+from dotenv import load_dotenv
+
+load_dotenv()
+
+NOTION_TOKEN = os.getenv("NOTION_TOKEN")
+DB_INVOICES_ID = os.getenv("DB_INVOICES_ID")
+
+HEADERS = {
+    "Authorization": f"Bearer {NOTION_TOKEN}",
+    "Notion-Version": "2022-06-28",
+    "Content-Type": "application/json"
+}
 
 def create_invoice_page(client: str, interventions: list, total: float, invoice_number: str):
-    children = []
+    if not DB_INVOICES_ID:
+        raise ValueError("❌ DB_INVOICES_ID manquant. Vérifie ton .env")
 
+    children = []
     for item in interventions:
         props = item["properties"]
-        
-        # Récupération des infos par les bonnes clés
         cours = props["Cours"]["title"][0]["text"]["content"] if props["Cours"]["title"] else "Sans nom"
         heures = props["Nombre heures"]["number"]
         tarif = props["Tarif horaire"]["number"]
@@ -29,24 +40,29 @@ def create_invoice_page(client: str, interventions: list, total: float, invoice_
         })
 
     payload = {
-        "parent": {"database_id": os.getenv("DB_INVOICES_ID")},
+        "parent": {"database_id": DB_INVOICES_ID},
         "properties": {
-            "Nom du client": {
+            "Client": {
                 "title": [{"text": {"content": client}}]
             },
             "Mois": {
                 "rich_text": [{"text": {"content": datetime.now().strftime("%Y-%m")}}]
             },
-            "Montant total": {
+            "Total Amount": {
                 "number": total
             },
-            "ID de Facture": {
+            "Invoice Number": {
                 "rich_text": [{"text": {"content": invoice_number}}]
             }
         },
         "children": children
     }
 
+    print("🛠️ Payload envoyé à Notion :")
+    import json
+    print(json.dumps(payload, indent=2))
+
     response = requests.post("https://api.notion.com/v1/pages", headers=HEADERS, json=payload)
     response.raise_for_status()
+    print("✅ Facture créée avec succès sur Notion.")
     return response.json()

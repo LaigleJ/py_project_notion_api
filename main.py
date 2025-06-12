@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from collections import defaultdict
 from datetime import datetime
 
-from notion_api import query_unbilled_entries
+from notion_api import get_database_properties, query_unbilled_entries
 from data_processing import extraire_interventions, analyse_par_ville, analyse_par_ecole_et_classe, analyse_par_mois, analyse_heures_et_montant_total
 from facture_utils import create_invoice_page
 
@@ -43,7 +43,7 @@ print(analyse_mois)
 print("\n📈 Analyse globale des heures et montant total...")
 analyse_globale = analyse_heures_et_montant_total(df)
 
-# --- ÉTAPE 4 : Export des résultats  ---
+# # --- ÉTAPE 4 : Export des résultats  ---
 print("\n💾 Sauvegarde des analyses dans des fichiers CSV...")
 analyse_ville.to_csv("analyse_par_ville.csv", index=False)
 analyse_ecole_classe.to_csv("analyse_par_ecole_et_classe.csv", index=False)
@@ -75,3 +75,9 @@ for client, pages in interventions_par_client.items():
     create_invoice_page(client=client, interventions=pages, total=total, invoice_number=invoice_number)
 
 print("✅ Toutes les factures ont été créées.")
+
+
+# *****************************************************************************************
+# Test debug connection 
+# data = get_database_properties(os.getenv("DB_INVOICES_ID"))
+# pprint(data)

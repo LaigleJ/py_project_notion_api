@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 NOTION_TOKEN = os.getenv("NOTION_TOKEN")
 DB_ID = os.getenv("DB_INTERVENTIONS_ID")
+DB_INVOICES_ID = os.getenv("DB_INVOICES_ID")
 
 HEADERS = {
     "Authorization": f"Bearer {NOTION_TOKEN}",
