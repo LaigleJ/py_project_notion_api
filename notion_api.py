@@ -94,3 +94,26 @@ def query_unbilled_entries(date_begin: str, date_end: str, a_ete_facture: bool):
     pprint(response.json())
     return response.json()["results"]
   
+# Fonction pour extraire les interventions dans un DataFrame
+def extraire_interventions(results):
+    lignes = []
+    for item in results:
+        props = item["properties"]
+
+        # Extraction simple des propriétés utiles
+        ligne = {
+            "Ecole": props["Ecole"]["select"]["name"] if props["Ecole"]["select"]["name"] else "",
+            "Ville": props["Ville"]["select"]["name"] if props["Ville"]["select"] else "",
+            "Classe": props["Classe"]["select"]["name"] if props["Classe"]["select"]["name"] else "",
+            "Nombre heures": props["Nombre heures"]["number"],
+            "Tarif horaire": props["Tarif horaire"]["number"],
+            "Date de début": props["Date de début"]["date"]["start"],
+            "Facturé": props["Facturé"]["checkbox"]
+        }
+
+        # Calcul du montant à facturer
+        ligne["Montant"] = ligne["Nombre heures"] * ligne["Tarif horaire"] if ligne["Nombre heures"] and ligne["Tarif horaire"] else 0
+
+        lignes.append(ligne)
+
+    return pd.DataFrame(lignes)
