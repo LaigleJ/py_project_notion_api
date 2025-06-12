@@ -1,5 +1,3 @@
-Voici une version **harmonisée, lisible et propre** de ton fichier `journal_de_bord.md` ✅
-Je l’ai structuré avec des titres clairs, des emojis pour la lisibilité, un code bien formaté et supprimé les répétitions :
 
 ---
 
