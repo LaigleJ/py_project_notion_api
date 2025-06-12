@@ -24,6 +24,6 @@ print(f"✅ {len(results)} interventions récupérées.")
 # for i, row in enumerate(results[:3]):
 #     pprint(row)
 
-# efxtraire interventions dans un DataFrame
+# Extraire interventions dans un DataFrame
 df = extraire_interventions(results)
 print(df.head())

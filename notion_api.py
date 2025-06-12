@@ -115,5 +115,12 @@ def extraire_interventions(results):
         ligne["Montant"] = ligne["Nombre heures"] * ligne["Tarif horaire"] if ligne["Nombre heures"] and ligne["Tarif horaire"] else 0
 
         lignes.append(ligne)
-
-    return pd.DataFrame(lignes)
+        
+    # Convertir les résultats en DataFrame
+    df = pd.DataFrame(lignes)
+    # Enregistrer le DataFrame en CSV
+    csv_filename = f"file_data_ecole.csv"
+    df.to_csv(csv_filename, index=False)
+    print(f"✅ Fichier CSV créé : {csv_filename}")
+      
+    return df

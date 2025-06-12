@@ -1,0 +1,35 @@
+Ecole,Ville,Classe,Nombre heures,Tarif horaire,Date de début,Facturé,Montant
+ENSIIE,Evry,M1 Maths,3.5,10,2025-07-02,False,35.0
+EPITECH Digital,Le Kremlin-Bicêtre,M1,7.0,10,2025-03-05,False,70.0
+NEXA Digital School,Paris,BTS SIO,3.5,15,2025-05-23,False,52.5
+EPITECH Digital,Le Kremlin-Bicêtre,M1,7.0,10,2025-03-19,False,70.0
+ECE,Paris,M1,7.0,10,2025-03-05,False,70.0
+NEXA Digital School,Paris,BTS SIO,3.5,15,2025-07-09,False,52.5
+ECE,Paris,L3,3.5,15,2025-05-16,False,52.5
+ECE,Paris,M1,7.0,10,2025-03-19,False,70.0
+ESIEE,Noisy-le-Grand,M2 EDWEB,28.0,5,2025-04-25,False,140.0
+ECE,Paris,L3,3.5,15,2025-08-12,False,52.5
+ENSIIE,Evry,M1 Maths,3.5,5,2025-08-07,False,17.5
+ECE,Paris,L3,3.5,15,2025-08-07,False,52.5
+ECE,Paris,L3,3.5,15,2025-04-23,False,52.5
+ECE,Paris,L3,14.0,15,2025-07-28,False,210.0
+ENSIIE,Evry,M1 Maths,2.0,10,2025-07-24,False,20.0
+ECE,Paris,L3,2.0,15,2025-07-24,False,30.0
+NEXA Digital School,Paris,BTS SIO,2.0,15,2025-07-31,False,30.0
+ENSIIE,Evry,M1 EDWEB,14.0,15,2025-07-31,False,210.0
+ENSIIE,Evry,L3,3.5,10,2025-08-07,False,35.0
+ESIEE,Noisy-le-Grand,M1,35.0,10,2025-06-30,False,350.0
+EPITECH Digital,Le Kremlin-Bicêtre,M1,7.0,10,2025-03-05,False,70.0
+ESIEE,Noisy-le-Grand,M1,28.0,5,2025-06-10,False,140.0
+ENSIIE,Evry,M1 Maths,3.5,10,2025-04-23,False,35.0
+ENSIIE,Evry,L3,7.0,10,2025-08-14,False,70.0
+ENSIIE,Evry,L3,3.5,5,2025-04-23,False,17.5
+NEXA Digital School,Paris,BTS SIO,3.5,15,2025-08-21,False,52.5
+ENSIIE,Evry,L3,3.5,5,2025-07-02,False,17.5
+ECE,Paris,BTS SIO,3.5,15,2025-07-02,False,52.5
+NEXA Digital School,Paris,BTS SIO,3.5,15,2025-04-23,False,52.5
+NEXA Digital School,Paris,BTS SIO,3.5,15,2025-08-12,False,52.5
+ENSIIE,Evry,L3,2.0,5,2025-07-24,False,10.0
+ENSIIE,Evry,L3,3.5,5,2025-05-16,False,17.5
+ENSIIE,Evry,M1 Maths,3.5,10,2025-05-16,False,35.0
+ENSIIE,Evry,M1 Maths,3.5,5,2025-08-12,False,17.5
