@@ -341,3 +341,5 @@ def create_invoice_page(client: str, interventions: list, total: float, invoice_
 
 ##Capture Ecran de la db invoices de notion
 ![Capture écran des facures dans notion](./assets/capture_db_invoices_remplies.png)
+
+---
