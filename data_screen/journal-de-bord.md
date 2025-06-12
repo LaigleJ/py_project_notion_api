@@ -1,10 +1,5 @@
 
----
-
-```markdown
-<!-- Marie-Charlotte et Jérémy -->
-
-# 📘 Journal de bord – Projet Python x API Notion
+# 📘 Journal de bord – Projet Python x API Notion -- Marie-Charlotte et Jérémy --
 
 ---
 
@@ -38,9 +33,9 @@
 ---
 
 
-### Étape 0 & 1– Configuration de l’environnement & Définir les entêtes pour l’API Notion
+## Étape 0 & 1– Configuration de l’environnement & Définir les entêtes pour l’API Notion
 
-## ✅ Fonctionnalités implémentées
+### ✅ Fonctionnalités implémentées
 
 - [x] Connexion sécurisée à l'API Notion via clé secrète
 - [x] Requête filtrée selon la colonne **Facturé** + plage de dates
@@ -49,13 +44,13 @@
 
 ---
 
-## 🧪 Tests & validation
+### 🧪 Tests & validation
 
 - 🔄 Vérification manuelle dans le terminal (print & logs)
 - ✅ Code retour HTTP 200 → données bien récupérées
 
 
-## 📸 Capture – Connexion à l'API réussie
+### 📸 Capture – Connexion à l'API réussie
 
 > Exemple de connexion réussie à Notion, avec récupération des propriétés de la base :
 
@@ -64,9 +59,9 @@
 ---
 
 
-### Étape 2 – Fonction query_unbilled_entries(date_begin : str, date_end : str, a_ete_facture : bool)
+## Étape 2 – Fonction query_unbilled_entries(date_begin : str, date_end : str, a_ete_facture : bool)
 
-## 🔍 Code – Requête des interventions non facturées + CSV
+### 🔍 Code – Requête des interventions non facturées + CSV
 
 ```python
 def query_unbilled_entries(date_begin: str, date_end: str, a_ete_facture: bool):
@@ -118,7 +113,7 @@ def query_unbilled_entries(date_begin: str, date_end: str, a_ete_facture: bool):
 ````
 
 
-## 🧭 Prochaines étapes
+### 🧭 Prochaines étapes
 
 ➡️ Nettoyage et transformation des données avec `pandas`
 ➡️ Préparation des templates de factures (PDF ou CSV)
@@ -126,7 +121,7 @@ def query_unbilled_entries(date_begin: str, date_end: str, a_ete_facture: bool):
 
 ---
 
-##  🔍 Questions pour analyse :
+###  🔍 Questions pour analyse :
 ### récupérer les résultats et montrez via des DataFrames :
 par ville, le nombre d’écoles, le nombre d’heures données et la somme à facturer
 
@@ -136,7 +131,7 @@ par ville, le nombre d’écoles, le nombre d’heures données et la somme à f
 ![CSV datas](./assets/capture_csv_datas_1.png)
 
 
-## 🔍 Code – Extrait du code de la premiere récuperation data triées + CSV
+### 🔍 Code – Extrait du code de la premiere récuperation data triées + CSV
 
 ```python
 # Fonction pour extraire les interventions dans un DataFrame
@@ -265,22 +260,66 @@ def analyse_heures_et_montant_total(df):
 
     return resume
 ````
-Total heures enseignées       Montant total à facturer
-235.5 h	                      2 312.5 €
 
 
-## Analyse par ville : nombre d'écoles, heures, montant
+
+### Analyse par ville : nombre d'écoles, heures, montant
+
+| Ville      | Nombre d'écoles    | Nombre heures   | Montant     |
+|------ |--------|---|-------|
+| Evry          | 1  | 56.5    | 537.5   |
+| Le Kremlin-Bicêtre | 1 | 21.0    |210.0  |
+| Noisy-le-Grand  | 1 | 91.0    | 630.0   |
+| Paris | 2 | 67.0  |935.0  |
+
 [Analyse par ville](./assets/CSV/analyse_par_ville.csv)
-## Analyse par école et classe
-[Analyse par ville](./assets/CSV/analyse_par_ecole_et_classe.csv)
-## Analyse par mois (passé et futur)
-[Analyse par ville](./assets/CSV/analyse_par_mois.csv)
-## Analyse globale : total des heures enseignées et somme à facturer
-[Analyse par ville](./assets/CSV/analyse_globale.csv)
 
-### ETAPE 3 : Première fonction de création de factures dans Notion 
 
-## Extrait du code facture_utils.py ::
+### Analyse par école et classe
+|Ecole|Classe|Total heures|
+|---|---|---|
+ECE|BTS SIO|3.5
+ECE|L3|30.0
+ECE|M1|14.0
+ENSIIE|L3|23.0
+ENSIIE|M1 EDWEB|14.0
+ENSIIE|M1 Maths|19.5
+EPITECH Digital|M1|21.0
+ESIEE|M1|63.0
+ESIEE|M2 EDWEB|28.0
+NEXA Digital School|BTS SIO|19.5
+
+[Analyse par école et classe](./assets/CSV/analyse_par_ecole_et_classe.csv)
+
+
+### Analyse par mois (passé et futur)
+Futur|Mois|Nombre heures
+|---|---|---
+False|2025-03|35.0
+False|2025-04|42.0
+False|2025-05|14.0
+False|2025-06|28.0
+True|2025-06|35.0
+True|2025-07|50.0
+True|2025-08|31.5
+
+
+[Analyse par mois (passé et futur)](./assets/CSV/analyse_par_mois.csv)
+
+
+### Analyse globale : total des heures enseignées et somme à facturer
+|Total heures enseignées     |  Montant total à facturer|
+|-------------|-----------------|
+|235.5 h	              |        2 312.5 €|
+
+[Analyse globale](./assets/CSV/analyse_globale.csv)
+
+
+
+---
+## ETAPE 3 : Première fonction de création de factures dans Notion 
+
+### Extrait du code facture_utils.py ::
 ```PYTHON
 def create_invoice_page(client: str, interventions: list, total: float, invoice_number: str):
     if not DB_INVOICES_ID:
@@ -337,7 +376,7 @@ def create_invoice_page(client: str, interventions: list, total: float, invoice_
 
 ````
 
-##Capture Ecran de la db invoices de notion
+### Capture Ecran de la db invoices de notion
 ![Capture écran des facures dans notion](./assets/capture_db_invoices_remplies.png)
 
 ---
