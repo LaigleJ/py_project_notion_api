@@ -2,6 +2,7 @@ import os
 import requests
 import pandas as pd
 
+from pprint import pprint
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -33,13 +34,6 @@ if __name__ == "__main__":
 # QUERY recupere les datas  facturés
 def query_unbilled_entries(date_begin: str, date_end: str, a_ete_facture: bool):
     print("📡 Début de la requête vers Notion...")
-    
-    DB_ID = os.getenv("DB_INTERVENTIONS_ID")
-    HEADERS = {
-        "Authorization": f"Bearer {os.getenv('NOTION_TOKEN')}",
-        "Notion-Version": "2022-06-28",
-        "Content-Type": "application/json"
-    }
 
     # Construction de la query
     if a_ete_facture is None:
@@ -84,6 +78,7 @@ def query_unbilled_entries(date_begin: str, date_end: str, a_ete_facture: bool):
         response.raise_for_status()
 
     print("✅ Données bien récupérées !")
+    pprint(response.json())
     return response.json()["results"]
   
   # Transformer les datas reçu en csv : 

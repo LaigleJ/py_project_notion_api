@@ -1,6 +1,7 @@
 # # main.py
 import os
-from notion_api import query_unbilled_entries,  get_database_properties, extraire_interventions
+from pprint import pprint
+from notion_api import query_unbilled_entries,  get_database_properties
 
 import pandas as pd
 
@@ -21,7 +22,7 @@ print(f"✅ {len(results)} interventions récupérées.")
 
 # Facultatif : affichage partiel
 for i, row in enumerate(results[:3]):
-    print(row)
+    pprint(row)
 
 # Faire le csv
 # results = query_unbilled_entries(date_debut, date_fin, facture)
