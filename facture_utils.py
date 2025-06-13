@@ -30,33 +30,9 @@ def create_invoice_page(client: str, interventions: list, total: float, invoice_
     if not DB_INVOICES_ID:
         raise ValueError("❌ DB_INVOICES_ID manquant. Vérifie ton .env")
 
-    children = []
+    mois = datetime.now().strftime("%Y-%m")  # utilisé dans le contenu, pas besoin de passer en paramètre
+    children = generate_invoice_blocks(interventions, total, client, mois)
 
-    for item in interventions:
-        props = item["properties"]
-
-        # Extraction du nom du cours (champ Titre, donc une liste)
-        cours = props["Cours"]["title"][0]["text"]["content"] if props["Cours"]["title"] else "Sans nom"
-
-        heures = props["Nombre heures"]["number"]
-        tarif = props["Tarif horaire"]["number"]
-        montant = heures * tarif
-
-        ligne = f"📘 {cours:<30} | 🕒 {heures:.1f}h × 💰 {tarif:.2f}€/h = 🧾 {montant:.2f}€"
-
-        # Bloc de paragraphe à insérer dans la facture
-        children.append({
-            "object": "block",
-            "type": "paragraph",
-            "paragraph": {
-                "rich_text": [{
-                    "type": "text",
-                    "text": {"content": ligne}
-                }]
-            }
-        })
-
-    # Payload complet pour créer la facture
     payload = {
         "parent": {"database_id": DB_INVOICES_ID},
         "properties": {
@@ -64,7 +40,7 @@ def create_invoice_page(client: str, interventions: list, total: float, invoice_
                 "title": [{"text": {"content": client}}]
             },
             "Mois": {
-                "rich_text": [{"text": {"content": datetime.now().strftime("%Y-%m")}}]
+                "rich_text": [{"text": {"content": mois}}]
             },
             "Total Amount": {
                 "number": total
@@ -84,3 +60,118 @@ def create_invoice_page(client: str, interventions: list, total: float, invoice_
     response.raise_for_status()
     print("✅ Facture créée avec succès sur Notion.")
     return response.json()
+
+
+# ETAPE 4 Ameliorer visu facture
+
+def generate_invoice_blocks(interventions, total, client, mois):
+    children = []
+
+    # Titre principal
+    children.append({
+        "object": "block",
+        "type": "heading_1",
+        "heading_1": {
+            "rich_text": [{
+                "type": "text",
+                "text": {"content": "🧾 FACTURE"}
+            }]
+        }
+    })
+
+    # Bloc info client et mois
+    children.extend([
+        {
+            "object": "block",
+            "type": "callout",
+            "callout": {
+                "icon": {"type": "emoji", "emoji": "👤"},
+                "rich_text": [{
+                    "type": "text",
+                    "text": {"content": f"Client : {client}"}
+                }]
+            }
+        },
+        {
+            "object": "block",
+            "type": "callout",
+            "callout": {
+                "icon": {"type": "emoji", "emoji": "📅"},
+                "rich_text": [{
+                    "type": "text",
+                    "text": {"content": f"Mois de facturation : {mois}"}
+                }]
+            }
+        },
+        {"object": "block", "type": "divider", "divider": {}},
+        {
+            "object": "block",
+            "type": "heading_2",
+            "heading_2": {
+                "rich_text": [{
+                    "type": "text",
+                    "text": {"content": "📌 Détail des interventions"}
+                }]
+            }
+        }
+    ])
+
+    # En-tête formaté manuellement
+    header = f"{'Cours'.ljust(30)}{'Heures'.rjust(8)}{'Tarif'.rjust(10)}{'Total'.rjust(10)}"
+    children.append({
+        "object": "block",
+        "type": "paragraph",
+        "paragraph": {
+            "rich_text": [{
+                "type": "text",
+                "text": {"content": header}
+            }]
+        }
+    })
+
+    # Ligne de séparation visuelle
+    children.append({
+        "object": "block",
+        "type": "paragraph",
+        "paragraph": {
+            "rich_text": [{
+                "type": "text",
+                "text": {"content": "-" * 60}
+            }]
+        }
+    })
+
+    # Lignes de détail
+    for item in interventions:
+        props = item["properties"]
+        cours = props["Cours"]["title"][0]["text"]["content"] if props["Cours"]["title"] else "Sans nom"
+        heures = props["Nombre heures"]["number"]
+        tarif = props["Tarif horaire"]["number"]
+        montant = heures * tarif
+
+        ligne = f"{cours.ljust(30)}{str(f'{heures:.1f}h').rjust(8)}{str(f'{tarif:.2f}€').rjust(10)}{str(f'{montant:.2f}€').rjust(10)}"
+        children.append({
+            "object": "block",
+            "type": "paragraph",
+            "paragraph": {
+                "rich_text": [{
+                    "type": "text",
+                    "text": {"content": ligne}
+                }]
+            }
+        })
+
+    # Total final
+    children.append({
+        "object": "block",
+        "type": "callout",
+        "callout": {
+            "icon": {"type": "emoji", "emoji": "💰"},
+            "rich_text": [{
+                "type": "text",
+                "text": {"content": f"Total à payer : {total:.2f} €"}
+            }]
+        }
+    })
+
+    return children

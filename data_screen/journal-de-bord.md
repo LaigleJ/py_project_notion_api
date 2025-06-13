@@ -395,6 +395,123 @@ ajout de la devis € dans le tableau Notion
 
 🎯 Objectif : Retourner une liste de blocs children à insérer dans une page Notion pour construire une facture propre, structurée et lisible.
 
+On avait commencé à rendre plus lisible la facture en modifiant cette ligne : 
+```PYTHON
+        ligne = f"📘 {cours:<30} | 🕒 {heures:.1f}h × 💰 {tarif:.2f}€/h = 🧾 {montant:.2f}€"
+
+````
+pour notre confort. 
+
+
+Nouvelle fonction d affichage de facture
+```PYTHON
+
+def generate_invoice_blocks(interventions, total, client, mois):
+    children = []
+
+    # Bloc titre principal
+    children.append({
+        "object": "block",
+        "type": "heading_1",
+        "heading_1": {
+            "rich_text": [{
+                "type": "text",
+                "text": {"content": "FACTURE"}
+            }]
+        }
+    })
+
+    # Infos client et mois
+    children.append({
+        "object": "block",
+        "type": "paragraph",
+        "paragraph": {
+            "rich_text": [{
+                "type": "text",
+                "text": {"content": f"Client : {client}"}
+            }]
+        }
+    })
+    children.append({
+        "object": "block",
+        "type": "paragraph",
+        "paragraph": {
+            "rich_text": [{
+                "type": "text",
+                "text": {"content": f"Mois : {mois}"}
+            }]
+        }
+    })
+
+    # Ligne de séparation
+    children.append({"object": "block", "type": "divider", "divider": {}})
+
+    # Sous-titre
+    children.append({
+        "object": "block",
+        "type": "heading_2",
+        "heading_2": {
+            "rich_text": [{
+                "type": "text",
+                "text": {"content": "Détail des interventions"}
+            }]
+        }
+    })
+
+    # En-tête tableau
+    children.append({
+        "object": "block",
+        "type": "paragraph",
+        "paragraph": {
+            "rich_text": [{
+                "type": "text",
+                "text": {
+                    "content": "Cours | Heures | Tarif | Total\n--- | --- | --- | ---"
+                }
+            }]
+        }
+    })
+
+    # Lignes du tableau
+    for item in interventions:
+        props = item["properties"]
+        cours = props["Cours"]["title"][0]["text"]["content"] if props["Cours"]["title"] else "Sans nom"
+        heures = props["Nombre heures"]["number"]
+        tarif = props["Tarif horaire"]["number"]
+        montant = heures * tarif
+
+        ligne = f"{cours} | {heures:.1f}h | {tarif:.2f}€ | {montant:.2f}€"
+        children.append({
+            "object": "block",
+            "type": "paragraph",
+            "paragraph": {
+                "rich_text": [{
+                    "type": "text",
+                    "text": {"content": ligne}
+                }]
+            }
+        })
+
+    # Total
+    children.append({
+        "object": "block",
+        "type": "callout",
+        "callout": {
+            "icon": {"type": "emoji", "emoji": "💰"},
+            "rich_text": [{
+                "type": "text",
+                "text": {"content": f"Total à payer : {total:.2f} €"}
+            }]
+        }
+    })
+
+    return children
+
+
+````
+
+
+
 ## Étape 5 – Nouvelle version de create_invoice_page(...)
 remplacer les children de ta fonction actuelle par l’appel à la fonction generate_invoice_blocks.
 

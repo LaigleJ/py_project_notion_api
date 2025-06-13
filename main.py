@@ -8,7 +8,7 @@ from datetime import datetime
 
 from notion_api import get_database_properties, query_unbilled_entries
 from data_processing import extraire_interventions, analyse_par_ville, analyse_par_ecole_et_classe, analyse_par_mois, analyse_heures_et_montant_total
-from facture_utils import create_invoice_page
+from facture_utils import create_invoice_page, create_invoice_page, generate_invoice_blocks
 
 # Charger les variables d'environnement
 load_dotenv()
@@ -88,3 +88,4 @@ print("✅ Toutes les factures ont été créées.")
 # Test debug connection 
 # data = get_database_properties(os.getenv("DB_INVOICES_ID"))
 # pprint(data)
+
