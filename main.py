@@ -15,7 +15,7 @@ load_dotenv()
 
 # --- PARAMÈTRES ---
 date_debut = "2025-01-01"
-date_fin = "2025-03-15"
+date_fin = "2025-04-25"
 a_facturer = False  # ou None si on veut tout
 
 # --- ÉTAPE 1 : Récupération des données ---

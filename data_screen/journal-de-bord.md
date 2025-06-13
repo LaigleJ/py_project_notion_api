@@ -12,26 +12,55 @@
 | ✅ -         | Analyse avec `pandas`                           | Terminé    | 2025-06-12   |
 | ✅ Étape 3   | Génération de factures + export CSV             | Terminé    | -            |
 | ✅ -         | Ecriture des factures sur notion                | Terminé    | 2025-06-12   |
-| ⏳ Étape 4   | Mise en page : generate_invoice_blocks          | À faire    | -            |
-| ⏳ Étape 5   | Mise en page : def create_invoice_page          | À faire    | -            |
-| ⏳ Étape 6   | Mise à joour : mark_as_billed(pages)            | À faire    | -            |
-| 🔄 Étape 7   | Orchestrer tout le processus dans le main       | En cours   | 2025-06-12   |
+| ✅ Étape 4   | Mise en page : generate_invoice_blocks          | Terminé    | -            |
+| ✅ Étape 5   | Mise en page : def create_invoice_page          | Terminé    | -            |
+| ✅ Étape 6   | Mise à joour : mark_as_billed(pages)            | Terminé    | -            |
+| ✅ Étape 7   | Orchestrer tout le processus dans le main       | Terminé   | 2025-06-12   |
 
 ---
 
-## 📁 Structure du projet (provisoire)
+## 📁 Structure du projet
 
 
-📦 py\_project\_notion\_api/
-├── 📄 .env
-├── 📄 main.py
-├── 📄 notion\_api.py
-├── 📄 journal\_de\_bord.md
-└── 📁 assets/
-└── 📸 capture\_api\_ok.png
+py_project_notion_api/
+│
+├── .env
+├── main.py
+├── notion_api.py
+├── analyse_interventions.py
+├── facture_utils.py
+├── last_invoice_number.txt
+├── assets/
+│   ├── capture_api_ok.png
+│   ├── capture_db_invoices_remplies.png
+│   └── capture_facture_notion.png
 
 ---
 
+---
+⚙️ Installation & lancement
+1. Cloner le projet ou copier les fichiers dans un dossier local. 
+2. Installer les dépendances :
+
+```BASH
+pip install -r requirements.txt
+````
+
+3. Créer un fichier .env avec :
+
+```BASH
+NOTION_TOKEN=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
+DB_INTERVENTIONS_ID=20f2cdbb475781539762e04bffc6a0ba
+DB_INVOICES_ID=20f2cdbb475781bebaacd0a5be074411
+
+````
+
+4. Lancer le script principal :
+
+```BASH
+python main.py
+````
+---
 
 ## Étape 0 & 1– Configuration de l’environnement & Définir les entêtes pour l’API Notion
 
