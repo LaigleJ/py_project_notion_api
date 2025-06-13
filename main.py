@@ -8,7 +8,7 @@ from datetime import datetime
 
 from notion_api import get_database_properties, query_unbilled_entries
 from data_processing import extraire_interventions, analyse_par_ville, analyse_par_ecole_et_classe, analyse_par_mois, analyse_heures_et_montant_total
-from facture_utils import create_invoice_page, create_invoice_page, generate_invoice_blocks
+from facture_utils import create_invoice_page, create_invoice_page, generate_invoice_blocks, mark_as_billed
 
 # Charger les variables d'environnement
 load_dotenv()
@@ -80,8 +80,10 @@ for client, pages in interventions_par_client.items():
     print(f"📄 Création de la facture pour {client} ({invoice_number}) : {total} €")
 
     create_invoice_page(client=client, interventions=pages, total=total, invoice_number=invoice_number)
+# Marquer les interventions comme facturées
+    mark_as_billed(pages)
 
-print("✅ Toutes les factures ont été créées.")
+print("✅ Toutes les factures ont été créées. 🎉")
 
 
 # *****************************************************************************************

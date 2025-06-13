@@ -175,3 +175,28 @@ def generate_invoice_blocks(interventions, total, client, mois):
     })
 
     return children
+
+# Etape 6 Fonction mark_as_billed(pages) : marquer les interventions comme facturées
+def mark_as_billed(pages):
+    """
+    Met à jour chaque intervention pour cocher la case "Facturé".
+    """
+    for page in pages:
+        page_id = page["id"]
+        url = f"https://api.notion.com/v1/pages/{page_id}"
+
+        payload = {
+            "properties": {
+                "Facturé": {
+                    "checkbox": True
+                }
+            }
+        }
+
+        response = requests.patch(url, headers=HEADERS, json=payload)
+
+        if response.status_code == 200:
+            print(f"✅ Intervention {page_id} marquée comme facturée.")
+        else:
+            print(f"❌ Échec de la mise à jour pour {page_id}")
+            print(response.text)
