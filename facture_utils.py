@@ -42,7 +42,7 @@ def create_invoice_page(client: str, interventions: list, total: float, invoice_
         tarif = props["Tarif horaire"]["number"]
         montant = heures * tarif
 
-        ligne = f"{cours} - {heures}h x {tarif}€/h = {montant}€"
+        ligne = f"📘 {cours:<30} | 🕒 {heures:.1f}h × 💰 {tarif:.2f}€/h = 🧾 {montant:.2f}€"
 
         # Bloc de paragraphe à insérer dans la facture
         children.append({
@@ -66,7 +66,7 @@ def create_invoice_page(client: str, interventions: list, total: float, invoice_
             "Mois": {
                 "rich_text": [{"text": {"content": datetime.now().strftime("%Y-%m")}}]
             },
-            "Total Amount": {
+            "Total Amount €": {
                 "number": total
             },
             "Invoice Number": {
