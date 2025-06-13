@@ -6,16 +6,16 @@ from dotenv import load_dotenv
 from collections import defaultdict
 from datetime import datetime
 
-from notion_api import get_database_properties, query_unbilled_entries
-from data_processing import extraire_interventions, analyse_par_ville, analyse_par_ecole_et_classe, analyse_par_mois, analyse_heures_et_montant_total
-from facture_utils import create_invoice_page, create_invoice_page, generate_invoice_blocks, mark_as_billed
+from src.notion_api import get_database_properties, query_unbilled_entries
+from src.data_processing import extraire_interventions, analyse_par_ville, analyse_par_ecole_et_classe, analyse_par_mois, analyse_heures_et_montant_total
+from src.facture_utils import create_invoice_page, create_invoice_page, generate_invoice_blocks, mark_as_billed
 
 # Charger les variables d'environnement
 load_dotenv()
 
 # --- PARAMÈTRES ---
-date_debut = "2025-01-01"
-date_fin = "2025-04-25"
+date_debut = "2024-01-01"
+date_fin = "2024-12-31"
 a_facturer = False  # ou None si on veut tout
 
 # --- ÉTAPE 1 : Récupération des données ---

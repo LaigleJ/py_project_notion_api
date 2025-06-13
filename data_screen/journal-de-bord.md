@@ -1,12 +1,10 @@
 
-# 📘 Journal de bord – Projet Python x API Notion -- Marie-Charlotte et Jérémy --
-
----
+# 📘 Journal de bord - Projet Python x API Notion Marie-Charlotte et Jérémy
 
 ## 📅 Plan 
 
 | Étape         | Description                                     | Statut     | Date         |
-|-------------- |-------------------------------------------------|------------|--------------|
+|-------------- |-------------------------------------------------|:------------:|--------------|
 | ✅ Étape 1   | Connexion à l'API Notion via fichier `.env`     | Terminé    | 2025-06-12   |
 | ✅ Étape 2   | Fonction `query_unbilled_entries()`             | Terminé    | -            |
 | ✅ -         | Analyse avec `pandas`                           | Terminé    | 2025-06-12   |
@@ -15,36 +13,45 @@
 | ✅ Étape 4   | Mise en page : generate_invoice_blocks          | Terminé    | -            |
 | ✅ Étape 5   | Mise en page : def create_invoice_page          | Terminé    | -            |
 | ✅ Étape 6   | Mise à joour : mark_as_billed(pages)            | Terminé    | -            |
-| ✅ Étape 7   | Orchestrer tout le processus dans le main       | Terminé   | 2025-06-12   |
+| ✅ Étape 7   | Orchestrer tout le processus dans le main       | Terminé    | 2025-06-12   |
 
 ---
 
 ## 📁 Structure du projet
 
-
 py_project_notion_api/
 │
-├── .env
-├── main.py
-├── notion_api.py
-├── analyse_interventions.py
-├── facture_utils.py
-├── last_invoice_number.txt
-├── assets/
-│   ├── capture_api_ok.png
-│   ├── capture_db_invoices_remplies.png
-│   └── capture_facture_notion.png
+├── .env                         # 🔐 Variables d’environnement (token Notion, ID DB)
+├── .gitignore                   # 📄 Fichiers à ignorer par Git
+├── pyproject.toml               # ⚙️ Dépendances (format Poetry ou standard)
+├── README.md                    # 📘 Description du projet
+├── main.py                      # 🚀 Script principal à lancer
+│
+├── src/                         # 🧠 Code source Python
+│   ├── data_processing.py       # 📊 Fonctions d’analyse et extraction pandas
+│   ├── decorateur.py            # 🪄 Déco pour logs / debug
+│   ├── facture_utils.py         # 🧾 Génération et envoi de factures Notion
+│   └── notion_api.py            # 📡 (à renommer .py si script d’API)
+│
+└── data_screen/                 # 📸 Données et captures
+    └── assets/
+        ├── CSV/                 # 📂 Exports d’analyses CSV
+        │   ├── fichiers_csv.csv
+        │   └── ...
+        ├── capture_api_ok.png                # ✅ Connexion API réussie
+        ├── capture_db_invoices_remplies.png  # 🧾 Factures dans Notion
+        ├── capture_facture_notion.png        # 📄 Détail d'une facture
+        └── ...                               # 🖼️ Autres captures utiles
 
 ---
 
----
 ⚙️ Installation & lancement
 1. Cloner le projet ou copier les fichiers dans un dossier local. 
 2. Installer les dépendances :
 
 ```BASH
 pip install -r requirements.txt
-````
+```
 
 3. Créer un fichier .env avec :
 
@@ -52,21 +59,22 @@ pip install -r requirements.txt
 NOTION_TOKEN=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
 DB_INTERVENTIONS_ID=20f2cdbb475781539762e04bffc6a0ba
 DB_INVOICES_ID=20f2cdbb475781bebaacd0a5be074411
-
-````
+```
 
 4. Lancer le script principal :
 
 ```BASH
 python main.py
-````
+```
 ---
 
-## Étape 0 & 1– Configuration de l’environnement & Définir les entêtes pour l’API Notion
+# 🧠 Étapes principales du projet
+
+## Étape 0 & 1 – Configuration de l’environnement & Définir les entêtes pour l’API Notion
 
 ### ✅ Fonctionnalités implémentées
 
-- [x] Connexion sécurisée à l'API Notion via clé secrète
+- [x] Connexion sécurisée à l\'API Notion via clé secrète
 - [x] Requête filtrée selon la colonne **Facturé** + plage de dates
 - [x] Analyse des résultats avec `pandas`
 - [x] Export en `.csv` automatique
@@ -88,7 +96,13 @@ python main.py
 ---
 
 
-## Étape 2 – Fonction query_unbilled_entries(date_begin : str, date_end : str, a_ete_facture : bool)
+## Étape 2 – Fonction pour récuperer et trier les datas
+
+> query_unbilled_entries(date_begin : str, date_end : str, a_ete_facture : bool)
+
+> Requête sur la base Notion filtrée par date et statut "Facturé".
+
+> Transformation des résultats en pandas.DataFrame pour faciliter l\'analyse.
 
 ### 🔍 Code – Requête des interventions non facturées + CSV
 
@@ -139,7 +153,7 @@ def query_unbilled_entries(date_begin: str, date_end: str, a_ete_facture: bool):
     print(f"✅ CSV généré : {csv_filename}")
 
     return results
-````
+```
 
 
 ### 🧭 Prochaines étapes
@@ -152,6 +166,7 @@ def query_unbilled_entries(date_begin: str, date_end: str, a_ete_facture: bool):
 
 ###  🔍 Questions pour analyse :
 ### récupérer les résultats et montrez via des DataFrames :
+
 par ville, le nombre d’écoles, le nombre d’heures données et la somme à facturer
 
 > Exemple de la premiere récuperation data triées:
@@ -186,14 +201,27 @@ def extraire_interventions(results):
         lignes.append(ligne)
 
     return pd.DataFrame(lignes)
-    ````
+    ```
 
   > Exemple de la premiere récuperation data triées:
 
 ![DataFrame datas](./assets/capture_terminal_data_triees.png)
 ![CSV datas](./assets/capture_csv_datas_1.png)
 
-## ANALYSES data_processing.py::
+## Analyses avec pandas - data_processing.py :
+---
+### Analyses créées :
+
+ par ville : nombre d'écoles, heures totales, montant à facturer.
+
+ par école et par classe.
+
+ par mois : heures dans le passé / le futur.
+
+ globale : heures totales & montant à facturer.
+
+---
+
 ```PYTHON
 import pandas as pd
 from datetime import datetime
@@ -221,7 +249,7 @@ def extraire_interventions(results):
     df.to_csv("file_data_ecole.csv", index=False)
     print("✅ Fichier CSV créé : file_data_ecole.csv")
     return df
-
+    
 # Analyse par ville : nombre d'écoles, heures, montant
 def analyse_par_ville(df):
     if df is None or df.empty:
@@ -288,9 +316,18 @@ def analyse_heures_et_montant_total(df):
     print(resume)
 
     return resume
-````
+```
+---
+### 📂 Fichiers générés :
 
+* analyse_par_ville.csv
 
+* analyse_par_ecole_et_classe.csv
+
+* analyse_par_mois.csv
+
+* analyse_globale.csv
+---
 
 ### Analyse par ville : nombre d'écoles, heures, montant
 
@@ -301,7 +338,7 @@ def analyse_heures_et_montant_total(df):
 | Noisy-le-Grand  | 1 | 91.0    | 630.0   |
 | Paris | 2 | 67.0  |935.0  |
 
-[Analyse par ville](./assets/CSV/analyse_par_ville.csv)
+[📂 Analyse par ville](./assets/CSV/analyse_par_ville.csv)
 
 
 ### Analyse par école et classe
@@ -318,7 +355,7 @@ ESIEE|M1|63.0
 ESIEE|M2 EDWEB|28.0
 NEXA Digital School|BTS SIO|19.5
 
-[Analyse par école et classe](./assets/CSV/analyse_par_ecole_et_classe.csv)
+[📂 Analyse par école et classe](./assets/CSV/analyse_par_ecole_et_classe.csv)
 
 
 ### Analyse par mois (passé et futur)
@@ -333,7 +370,7 @@ True|2025-07|50.0
 True|2025-08|31.5
 
 
-[Analyse par mois (passé et futur)](./assets/CSV/analyse_par_mois.csv)
+[📂 Analyse par mois (passé et futur)](./assets/CSV/analyse_par_mois.csv)
 
 
 ### Analyse globale : total des heures enseignées et somme à facturer
@@ -341,14 +378,14 @@ True|2025-08|31.5
 |-------------|-----------------|
 |235.5 h	              |        2 312.5 €|
 
-[Analyse globale](./assets/CSV/analyse_globale.csv)
-
+[📂 Analyse globale](./assets/CSV/analyse_globale.csv)
 
 
 ---
 ## ETAPE 3 : Première fonction de création de factures dans Notion 
 
-### Extrait du code facture_utils.py ::
+### Extrait du code du fichier facture_utils.py :
+
 ```PYTHON
 def create_invoice_page(client: str, interventions: list, total: float, invoice_number: str):
     if not DB_INVOICES_ID:
@@ -403,36 +440,39 @@ def create_invoice_page(client: str, interventions: list, total: float, invoice_
     print("✅ Facture créée avec succès sur Notion.")
     return response.json()
 
-````
+```
 
-### Capture Ecran de la db invoices de notion
-![Capture écran des facures dans notion](./assets/capture_db_invoices_remplies.png)
+### Capture d'écran de la base de données invoices de Notion
+![Capture d'écran des facures dans notion](./assets/capture_db_invoices_remplies.png)
 
 ---
 
-Nous souhaitons améliorer le visuel de nos factures avec l ajout de décorations de texte. 
-Pb rencontrés : 
-amélioration du nom des factures pour qu il soit unique avec une auto incrémentation : invoice_number
+
+❓ Problèmes rencontrés : 
+* Nous souhations améliorer le visuel de nos factures avec l\'ajout de décorations de texte. 
+* amélioration du nom des factures pour qu\'il soit unique avec une auto incrémentation : invoice_number
+* ajout de la devis € dans le tableau Notion
+
 ```PYTHON
     mois = datetime.now().strftime("%Y-%m")
     invoice_number = f"FAC-{mois}-{client.replace(' ', '').upper()}"
     print(f"📄 Création de la facture pour {client} ({invoice_number}) : {total} €")
 ```
-ajout de la devis € dans le tableau Notion
 
 ##  Étape 4 – Fonction generate_invoice_blocks(...)
 
 🎯 Objectif : Retourner une liste de blocs children à insérer dans une page Notion pour construire une facture propre, structurée et lisible.
 
-On avait commencé à rendre plus lisible la facture en modifiant cette ligne : 
+💡 On a commencé à rendre plus lisible la facture en modifiant cette ligne : 
 ```PYTHON
         ligne = f"📘 {cours:<30} | 🕒 {heures:.1f}h × 💰 {tarif:.2f}€/h = 🧾 {montant:.2f}€"
+```
+ pour notre confort. 
+![Capture d'écran du rendu sur la facture](./assets/capture_facture_etape4.png)
 
-````
-pour notre confort. 
+---
 
-
-Nouvelle fonction d affichage de facture
+Nouvelle fonction d affichage de facture demandé :
 ```PYTHON
 
 def generate_invoice_blocks(interventions, total, client, mois):
@@ -537,12 +577,89 @@ def generate_invoice_blocks(interventions, total, client, mois):
     return children
 
 
-````
+```
+### 🧾 Exemple de facture générée
+Structure typique :
+![Capture d'écran du rendu sur la facture avec la mise en page demandé](./assets/capture_facture_finale.png)
 
+---
+❓ Problèmes rencontrés : 
+* Réussir à trouver la bonne façon d'écrire cette feature pour correspondre aux attentes de l\'API Notion pour obtenir le résultat escompté.
 
+---
 
 ## Étape 5 – Nouvelle version de create_invoice_page(...)
-remplacer les children de ta fonction actuelle par l’appel à la fonction generate_invoice_blocks.
+🎯 Objectif : remplacer les children de la fonction actuelle par l’appel à la fonction generate_invoice_blocks.
+Remplacement des children = [...] par :
 
-## Étape 6 – Fonction mark_as_billed(pages)
+```PYTHON
+children = generate_invoice_blocks(interventions, total, client, mois)
+
+```
+> Cela permet de construire automatiquement une page Notion bien formatée.
+
+
+
+
+## Étape 6 – Fonction mark_as_billed(pages) Marquer comme facturé
 Cette fonction met à jour la propriété Facturé de chaque page intervention 
+* envoie une requête PATCH pour chaque page,
+
+* coche la case "Facturé" après émission de la facture.
+
+```Python
+def mark_as_billed(pages):
+    for page in pages:
+        page_id = page["id"]
+        requests.patch(
+            f"https://api.notion.com/v1/pages/{page_id}",
+            headers=HEADERS,
+            json={"properties": {"Facturé": {"checkbox": True}}}
+        )
+```
+
+![Capture d'écran de la base de donnée Notion ](./assets/capture_db_coche.png)
+
+
+# Retour sur ce projet : 
+## ✅ Fonctionnalités terminées
+
+* Connexion API
+
+* Récupération des interventions
+
+* Analyse avec pandas
+
+* Génération automatique de factures dans Notion
+
+* Marquage des lignes comme facturées
+
+## ❌ Améliorations futures
+
+* Faire les factures uniquement pour les cours donnés => ajouter une sécurité supplémentaire dans le code
+
+* Générer les PDF directement depuis Python.
+
+* Envoyer les factures par e-mail automatiquement.
+
+* Ajouter un champ “commentaire” dans la facture.
+
+## ❓ Problèmes rencontrés
+
+* Nouveau langage à apprendre : PYTHON
+
+* Travail avec une nouvelle API 
+
+* Difficultés à formater les blocs dans Notion : résolu avec generate_invoice_blocks.
+
+* Format du champ title de Notion (cours) : nécessitait ["title"][0]["text"]["content"].
+
+* Génération d’un numéro de facture unique (résolu avec un fichier last_invoice_number.txt).
+
+![📸 Capture d'écran de la base de donnée de factures dans Notion](./assets/capture_facture_finale.png)
+
+# 🚀 Lancer le projet
+
+```BASH
+python main.py
+```
