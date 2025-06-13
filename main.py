@@ -14,8 +14,13 @@ from facture_utils import create_invoice_page, create_invoice_page, generate_inv
 load_dotenv()
 
 # --- PARAMÈTRES ---
+<<<<<<< HEAD
 date_debut = "2024-01-01"
 date_fin = "2024-12-31"
+=======
+date_debut = "2025-01-01"
+date_fin = "2025-03-15"
+>>>>>>> 485ffe9120856c7110a8eba690531cb7d7ffaed4
 a_facturer = False  # ou None si on veut tout
 
 # --- ÉTAPE 1 : Récupération des données ---
