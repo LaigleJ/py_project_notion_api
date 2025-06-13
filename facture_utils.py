@@ -72,24 +72,18 @@ def generate_invoice_blocks(interventions, total, client, mois):
         "object": "block",
         "type": "heading_1",
         "heading_1": {
-            "rich_text": [{
-                "type": "text",
-                "text": {"content": "🧾 FACTURE"}
-            }]
+            "rich_text": [{"type": "text", "text": {"content": "🧾 FACTURE"}}]
         }
     })
 
-    # Bloc info client et mois
+    # Informations client et mois
     children.extend([
         {
             "object": "block",
             "type": "callout",
             "callout": {
                 "icon": {"type": "emoji", "emoji": "👤"},
-                "rich_text": [{
-                    "type": "text",
-                    "text": {"content": f"Client : {client}"}
-                }]
+                "rich_text": [{"type": "text", "text": {"content": f"Client : {client}"}}]
             }
         },
         {
@@ -97,10 +91,7 @@ def generate_invoice_blocks(interventions, total, client, mois):
             "type": "callout",
             "callout": {
                 "icon": {"type": "emoji", "emoji": "📅"},
-                "rich_text": [{
-                    "type": "text",
-                    "text": {"content": f"Mois de facturation : {mois}"}
-                }]
+                "rich_text": [{"type": "text", "text": {"content": f"Période : {mois}"}}]
             }
         },
         {"object": "block", "type": "divider", "divider": {}},
@@ -108,40 +99,33 @@ def generate_invoice_blocks(interventions, total, client, mois):
             "object": "block",
             "type": "heading_2",
             "heading_2": {
-                "rich_text": [{
-                    "type": "text",
-                    "text": {"content": "📌 Détail des interventions"}
-                }]
+                "rich_text": [{"type": "text", "text": {"content": "📌 Détail des interventions"}}]
             }
         }
     ])
 
-    # En-tête formaté manuellement
-    header = f"{'Cours'.ljust(30)}{'Heures'.rjust(8)}{'Tarif'.rjust(10)}{'Total'.rjust(10)}"
-    children.append({
-        "object": "block",
-        "type": "paragraph",
-        "paragraph": {
-            "rich_text": [{
-                "type": "text",
-                "text": {"content": header}
-            }]
-        }
-    })
+    # En-tête tableau simulé
+    header = f"{'Cours'.ljust(30)} | {'Heures':^7} | {'Tarif':^10} | {'Total':^10}"
+    separator = "-" * len(header)
 
-    # Ligne de séparation visuelle
-    children.append({
-        "object": "block",
-        "type": "paragraph",
-        "paragraph": {
-            "rich_text": [{
-                "type": "text",
-                "text": {"content": "-" * 60}
-            }]
+    children.extend([
+        {
+            "object": "block",
+            "type": "paragraph",
+            "paragraph": {
+                "rich_text": [{"type": "text", "text": {"content": header}}]
+            }
+        },
+        {
+            "object": "block",
+            "type": "paragraph",
+            "paragraph": {
+                "rich_text": [{"type": "text", "text": {"content": separator}}]
+            }
         }
-    })
+    ])
 
-    # Lignes de détail
+    # Détails des lignes
     for item in interventions:
         props = item["properties"]
         cours = props["Cours"]["title"][0]["text"]["content"] if props["Cours"]["title"] else "Sans nom"
@@ -149,15 +133,12 @@ def generate_invoice_blocks(interventions, total, client, mois):
         tarif = props["Tarif horaire"]["number"]
         montant = heures * tarif
 
-        ligne = f"{cours.ljust(30)}{str(f'{heures:.1f}h').rjust(8)}{str(f'{tarif:.2f}€').rjust(10)}{str(f'{montant:.2f}€').rjust(10)}"
+        ligne = f"{cours.ljust(30)} | {str(f'{heures:.1f}h'):>7} | {str(f'{tarif:.2f}€'):>10} | {str(f'{montant:.2f}€'):>10}"
         children.append({
             "object": "block",
             "type": "paragraph",
             "paragraph": {
-                "rich_text": [{
-                    "type": "text",
-                    "text": {"content": ligne}
-                }]
+                "rich_text": [{"type": "text", "text": {"content": ligne}}]
             }
         })
 
@@ -170,6 +151,18 @@ def generate_invoice_blocks(interventions, total, client, mois):
             "rich_text": [{
                 "type": "text",
                 "text": {"content": f"Total à payer : {total:.2f} €"}
+            }]
+        }
+    })
+
+    # Ligne finale esthétique
+    children.append({
+        "object": "block",
+        "type": "paragraph",
+        "paragraph": {
+            "rich_text": [{
+                "type": "text",
+                "text": {"content": "✅ Merci de votre confiance !"}
             }]
         }
     })
