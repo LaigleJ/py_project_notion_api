@@ -380,3 +380,23 @@ def create_invoice_page(client: str, interventions: list, total: float, invoice_
 ![Capture écran des facures dans notion](./assets/capture_db_invoices_remplies.png)
 
 ---
+
+Nous souhaitons améliorer le visuel de nos factures avec l ajout de décorations de texte. 
+Pb rencontrés : 
+amélioration du nom des factures pour qu il soit unique avec une auto incrémentation : invoice_number
+```PYTHON
+    mois = datetime.now().strftime("%Y-%m")
+    invoice_number = f"FAC-{mois}-{client.replace(' ', '').upper()}"
+    print(f"📄 Création de la facture pour {client} ({invoice_number}) : {total} €")
+```
+ajout de la devis € dans le tableau Notion
+
+##  Étape 4 – Fonction generate_invoice_blocks(...)
+
+🎯 Objectif : Retourner une liste de blocs children à insérer dans une page Notion pour construire une facture propre, structurée et lisible.
+
+## Étape 5 – Nouvelle version de create_invoice_page(...)
+remplacer les children de ta fonction actuelle par l’appel à la fonction generate_invoice_blocks.
+
+## Étape 6 – Fonction mark_as_billed(pages)
+Cette fonction met à jour la propriété Facturé de chaque page intervention 
