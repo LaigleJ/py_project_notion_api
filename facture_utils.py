@@ -66,7 +66,7 @@ def create_invoice_page(client: str, interventions: list, total: float, invoice_
             "Mois": {
                 "rich_text": [{"text": {"content": datetime.now().strftime("%Y-%m")}}]
             },
-            "Total Amount €": {
+            "Total Amount": {
                 "number": total
             },
             "Invoice Number": {

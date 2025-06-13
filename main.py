@@ -69,7 +69,14 @@ for client, pages in interventions_par_client.items():
         total += (heures or 0) * (tarif or 0)
 
     mois = datetime.now().strftime("%Y-%m")
-    invoice_number = f"FAC-{mois}-{client.replace(' ', '').upper()}"
+    # Générer un numéro auto incrémenté
+    invoice_number = 1
+    if os.path.exists("last_invoice_number.txt"):
+        with open("last_invoice_number.txt", "r") as f:
+            invoice_number = int(f.read().strip()) + 1
+    with open("last_invoice_number.txt", "w") as f:
+        f.write(str(invoice_number))
+    invoice_number = f"FAC-{mois}-{invoice_number}-{client.replace(' ', '').upper()}"
     print(f"📄 Création de la facture pour {client} ({invoice_number}) : {total} €")
 
     create_invoice_page(client=client, interventions=pages, total=total, invoice_number=invoice_number)
